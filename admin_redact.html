@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редактирование подписки
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_redact.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="logo_container">
+        <img src="/static/images/logo_black.png" class="logo">
+    </div>
+
+    <div class="nav-bar">
+        <a href="{{ url_for('admin') }}" class="nav-link">Пользователи</a>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Фильмы</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create_movie') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact_movie') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Подписки</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+            <button type="submit" class="nav-link logout-btn">Выйти</button>
+        </form>
+    </div>
+
+    <div class="subscriptions-container">
+        <div class="add">
+            <p class="dan">Редактирование подписок</p>
+        </div>
+
+        {% if subscriptions %}
+        <div class="subscriptions-grid">
+            {% for sub in subscriptions %}
+            <div class="subscription-card">
+                <div class="card-header">
+                    <p class="card-title">{{ sub.title }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-price">{{ sub.price }}</div>
+                    <p class="card-text">{{ sub.text }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('update', id_sub=sub.id_sub) }}" class="card-button edit-btn">
+                        <p>Редактировать</p>
+                    </a>
+                    <form action="{{ url_for('delete', id_sub=sub.id_sub) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="card-button delete-btn" onclick="return confirm('Вы уверены, что хотите удалить эту подписку?')">
+                            <p>Удалить</p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-subscriptions">
+            <p>Нет доступных подписок</p>
+            <a href="{{ url_for('create') }}" class="card-button add-btn">Добавить первую подписку</a>
+        </div>
+        {% endif %}
+    </div>
+    
+{% endblock %}

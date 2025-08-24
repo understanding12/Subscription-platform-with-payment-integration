@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редактирование фильма
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/update_subscription.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="subscriptions-container">
+        <div class="logo_container">
+            <img src="/static/images/logo_black.png" class="logo">
+        </div>
+
+        <div class="nav-bar">
+            <a href="{{ url_for('admin') }}" class="nav-link">Пользователи</a>
+            <div class="dropdown">
+                <button class="nav-link dropdown-btn">Фильмы</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('create_movie') }}" class="nav-link">Добавление</a>
+                    <a href="{{ url_for('redact_movie') }}" class="nav-link">Редактирование</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="nav-link dropdown-btn">Подписки</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('create') }}" class="nav-link">Добавление</a>
+                    <a href="{{ url_for('redact') }}" class="nav-link">Редактирование</a>
+                </div>
+            </div>
+            <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+                <button type="submit" class="nav-link logout-btn">Выйти</button>
+            </form>
+        </div>
+
+        <div class="add">
+            <p class="dan">Редактирование фильма</p>
+        </div>
+
+        <div class="subscription-form">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Название фильма</label>
+                    <input type="text" class="form-control" id="title" name="title"
+                        value="{{ movie.title }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="genre">Жанр</label>
+                    <input type="text" class="form-control" id="genre" name="genre"
+                        value="{{ movie.genre }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Год выпуска</label>
+                    <input type="number" class="form-control" id="year" name="year"
+                        value="{{ movie.year }}" required min="1900" max="2100">
+                </div>
+
+                <div class="form-group">
+                    <label for="image_url">URL изображения</label>
+                    <input type="text" class="form-control" id="image_url" name="image_url"
+                        value="{{ movie.image_url }}" placeholder="Например: movie1.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="watch_url">URL для просмотра</label>
+                    <input type="text" class="form-control" id="watch_url" name="watch_url"
+                        value="{{ movie.watch_url }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age_rating">Класс доступа фильма</label>
+                    <input type="text" class="form-control" id="age_rating" name="age_rating"
+                        value="{{ movie.age_rating }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subscription_required">Требуемая подписка</label>
+                    <input type="text" class="form-control" id="subscription_required" name="subscription_required"
+                        value="{{ movie.subscription_required }}" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="card-button edit-btn">Сохранить изменения</button>
+                    <a href="{{ url_for('redact_movie') }}" class="card-button cancel-btn">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

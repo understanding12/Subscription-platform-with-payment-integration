@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Пользователи
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_head.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="logo_container">
+        <img src="/static/images/logo_black.png" class="logo">
+    </div>
+
+    <div class="nav-bar">
+        <a href="{{ url_for('admin') }}" class="nav-link">Пользователи</a>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Фильмы</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create_movie') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact_movie') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Подписки</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+            <button type="submit" class="nav-link logout-btn">Выйти</button>
+        </form>
+    </div>
+
+    <div class="add">
+        <p class="dan">Данные всех пользователей</p>
+    </div>
+
+    <div class="table-container">
+        <table class="centered-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Логин</th>
+                    <th>Статус</th>
+                    <th>Последняя активность</th>
+                    <th>Дата регистрации</th>
+                    <th>Баланс</th>
+                    <th>Подписка</th>
+                    <th>Следующий платёж</th>
+                    <th>Деактивация</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in data %}
+                {% if el.login.lower() != 'admin' %}
+                <tr>
+                    <td class="user-id">{{ el.id }}</td>
+                    <td class="user-login">{{ el.login }}</td>
+                    <td class="{% if el.is_active %}status-active{% else %}status-inactive{% endif %}">
+                        {% if el.is_active %}Активен{% else %}Неактивен{% endif %}
+                    </td>
+                    <td>{{ el.last_activity.strftime('%d.%m.%Y %H:%M') if el.last_activity else 'Нет данных' }}</td>
+                    <td>{{ el.registration_date.strftime('%d.%m.%Y') if el.registration_date else 'Нет данных' }}</td>
+                    <td class="balance-cell">{{ el.balance }} ₽</td>
+                    <td class="balance-cell">{{ el.subscription }}</td>
+                    <td>{{ el.next_payment_date.strftime('%d.%m.%Y') if el.next_payment_date else 'Нет данных' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin') }}" style="display: inline;">
+                            <input type="hidden" name="user_id" value="{{ el.id }}">
+                            <input type="hidden" name="reset_subscription" value="1">
+                            <button type="submit" class="reset-btn" onclick="return confirm('Сбросить подписку для {{ el.login }}?')">Сбросить</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

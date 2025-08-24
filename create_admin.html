@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавление подписки
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create_admin.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="logo_container">
+        <img src="/static/images/logo_black.png" class="logo">
+    </div>
+
+    <div class="nav-bar">
+        <a href="{{ url_for('admin') }}" class="nav-link">Пользователи</a>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Фильмы</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create_movie') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact_movie') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Подписки</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+            <button type="submit" class="nav-link logout-btn">Выйти</button>
+        </form>
+    </div>
+
+    <div class="add">
+        <p class="dan">Добавление новой подписки</p>
+    </div>
+
+    <div class="forma">
+    <form method="POST">
+        <input type="text" class="form-control" name="title" id="title" placeholder="Введите название" required>
+        <input type="number" class="form-control" name="price" id="price" step="100" placeholder="Введите цену" required>
+        <input type="text" class="form-control" name="text" id="text" placeholder="Введите описание" required>
+        <button class="btn btn-success" type="submit">Добавить подписку</button>
+    </form>
+    </div>
+
+{% endblock %}

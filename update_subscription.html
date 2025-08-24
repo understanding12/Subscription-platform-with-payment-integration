@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редактирование подписки
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/update_subscription.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="subscriptions-container">
+        <div class="logo_container">
+            <img src="/static/images/logo_black.png" class="logo">
+        </div>
+
+        <div class="nav-bar">
+            <a href="{{ url_for('admin') }}" class="nav-link">Пользователи</a>
+            <div class="dropdown">
+                <button class="nav-link dropdown-btn">Фильмы</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('create_movie') }}" class="nav-link">Добавление</a>
+                    <a href="{{ url_for('redact_movie') }}" class="nav-link">Редактирование</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="nav-link dropdown-btn">Подписки</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('create') }}" class="nav-link">Добавление</a>
+                    <a href="{{ url_for('redact') }}" class="nav-link">Редактирование</a>
+                </div>
+            </div>
+            <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+                <button type="submit" class="nav-link logout-btn">Выйти</button>
+            </form>
+        </div>
+
+        <div class="add">
+            <p class="dan">Редактирование подписки</p>
+        </div>
+
+        <div class="subscription-form">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="title">Название подписки</label>
+                    <input type="text" class="form-control" id="title" name="title"
+                        value="{{ subscription.title }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Цена (₽)</label>
+                    <input type="number" class="form-control" id="price" name="price"
+                        value="{{ subscription.price }}" required min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="text">Описание</label>
+                    <textarea class="form-control description-field" id="text" name="text" required>{{ subscription.text }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="card-button edit-btn">Сохранить изменения</button>
+                    <a href="{{ url_for('redact') }}" class="card-button cancel-btn">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

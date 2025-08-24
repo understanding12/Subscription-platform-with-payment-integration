@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Ваш баланс
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/balance.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}   
+    
+    <div class="logo_container">
+        <a href="{{ url_for('head') }}">
+            <div class="back-container">
+                <img src="/static/images/back.png" class="back-normal">
+                <img src="/static/images/back_hover.png" class="back-hover">
+            </div>
+        </a>
+        <img src="/static/images/logo.png" class="logo">
+    </div>
+
+    <div class="your_div">
+        <p class="your">Ваш баланс</p>
+    </div>
+
+    <div class="balance">
+        <p class="money">{{ user.balance }}₽</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('balance') }}">
+        <div class="input-container"></div>
+            <input type="number" name="amount" class="amount-input" placeholder="Введите сумму" min="0" required>
+        </div>
+        <div class="buttons">
+            <button type="submit" name="action" value="deposit" class="button">Пополнить</button>
+            <button type="submit" name="action" value="withdraw" class="button">Вывести</button>
+        </div>
+    </form>
+
+    <div class="comments"><p class="comments_p">© 2024 — 2025, TEES 18+</p></div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/balance.js') }}"></script>
+{% endblock %}

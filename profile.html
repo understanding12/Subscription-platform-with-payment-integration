@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Ваш профиль
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="logo_container">
+        <a href="{{ url_for('head') }}">
+            <div class="back-container">
+                <img src="/static/images/back.png" class="back-normal">
+                <img src="/static/images/back_hover.png" class="back-hover">
+            </div>
+        </a>
+        <img src="/static/images/logo.png" class="logo">
+    </div>
+
+    <div class="information">
+        <div class="icon">
+            <img src="/static/images/profile_icon.png" class="profile_icon">
+        </div>
+        <div class="personal_information">
+            <p class="your_profile">Ваш профиль</p>
+            <p class="name">ник: <span class="subtext">{{ user.login }}</span></p>
+            <p class="name">дата регистрации: <span class="subtext">{{ user.registration_date.strftime('%d.%m.%Y') }}</span></p>
+            <p class="name">активная подписка: <span class="subtext">{{ user.subscription }}</span></p>
+            <p class="name">баланс кошелька: <span class="subtext">{{ user.balance }}</span></p>
+            <p class="name">дата окончания подписки: 
+                <span class="subtext">
+                    {% if user.next_payment_date %}
+                        {{ user.next_payment_date.strftime('%d.%m.%Y') }}
+                    {% else %}
+                        Не установлена
+                    {% endif %}
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="history">
+        <p class="history_of">История транзакций</p>
+        <div class="transaction">
+            <div class="transaction-header">
+                <div class="header">Дата</div>
+                <div class="header">Сумма</div>
+                <div class="header">Тип операции</div>
+                <div class="header">Подписка</div>
+            </div>
+    
+            {% if user.transactions %}
+                {% for transaction in user.transactions|sort(attribute='transaction_date', reverse=True) %}
+                <div class="transaction-row">
+                    <div class="date">{{ transaction.transaction_date.strftime('%d.%m.%Y') }}</div>
+                    <div class="amount {{ transaction.operation_type }}">                
+                        {% if transaction.operation_type in ['withdrawal'] %}
+                            -{{ transaction.amount }}₽
+                        {% elif transaction.operation_type in ['deposit', 'refund'] %}
+                            +{{ transaction.amount }}₽
+                        {% else %}
+                            {{ transaction.amount }}₽
+                        {% endif %}
+                    </div>
+                    <div class="operation-type {{ transaction.operation_type }}">
+                        {% if transaction.operation_type == 'deposit' %}
+                            Пополнение
+                        {% elif transaction.operation_type == 'withdrawal' %}
+                            Снятие
+                        {% elif transaction.operation_type == 'refund' %}
+                            Возврат
+                        {% elif transaction.operation_type == 'subscription' %}
+                            Подписка
+                        {% endif %}
+                    </div>
+                    <div class="subscription">
+                        {{ transaction.subscription }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="transaction-row">
+                    <div class="date" colspan="4">Нет данных о транзакциях</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="comments"><p class="comments_p">© 2024 — 2025, TEES 18+</p></div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

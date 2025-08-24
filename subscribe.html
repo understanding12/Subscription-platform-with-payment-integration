@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Ваша подписка
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/subscribe.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="logo_container">
+        <a href="{{ url_for('head') }}">
+            <div class="back-container">
+                <img src="/static/images/back.png" class="back-normal">
+                <img src="/static/images/back_hover.png" class="back-hover">
+            </div>
+        </a>
+        <img src="/static/images/logo.png" class="logo">
+    </div>
+
+    <div class="subscription-container">
+        <div class="your_div">
+            <p class="your">Ваша подписка:</p>
+        </div>
+
+        <div class="balance">
+            <p class="money">{{ user.subscription }}</p>
+        </div>
+
+        <div class="description">
+            {% if current_sub.text %}
+                {% for line in current_sub.text.split('\n') %}
+                    <p class="description_text">{{ line }}</p>
+                {% endfor %}
+            {% else %}
+                <p class="description_text">Информация о подписке отсутствует</p>
+            {% endif %}
+        </div>
+        <div class="buttons_back">
+            <button class="button_back">Отменить подписку</button>
+        </div>
+    </div>
+
+    <div class="your_div2">
+        <p class="your2">Вы также можете активировать подписку:</p>
+    </div>
+
+    <div class="buttons">
+        {% for subscription in subscriptions %}
+            <button class="button" 
+                    data-tooltip="{{ subscription.text }}"
+                    onclick="changeSubscription('{{ subscription.title }}')">
+                {{ subscription.title }}
+            </button>
+        {% endfor %}
+    </div>
+
+    <div class="comments"><p class="comments_p">© 2024 — 2025, TEES 18+</p></div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p class="pay">Оплата подписки</p>
+            <p class="pay_column">Выбранная подписка: <span id="subTitle"></span></p>
+            <p class="pay_column">Стоимость: <span id="subPrice"></span>₽</p>
+            <p class="pay_column">Ваш баланс: {{ user.balance }}₽</p>
+            <button id="confirmPayment" class="pay-button">Оплатить</button>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/subscribe.js') }}"></script>
+{% endblock %}

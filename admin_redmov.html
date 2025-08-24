@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редактирование фильма
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_redact.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="logo_container">
+        <img src="/static/images/logo_black.png" class="logo">
+    </div>
+
+    <div class="nav-bar">
+        <a href="{{ url_for('admin') }}" class="nav-link">Пользователи</a>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Фильмы</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create_movie') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact_movie') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="nav-link dropdown-btn">Подписки</button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('create') }}" class="nav-link">Добавление</a>
+                <a href="{{ url_for('redact') }}" class="nav-link">Редактирование</a>
+            </div>
+        </div>
+        <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+            <button type="submit" class="nav-link logout-btn">Выйти</button>
+        </form>
+    </div>
+
+    <div class="subscriptions-container">
+        <div class="add">
+            <p class="dan">Редактирование фильмов</p>
+        </div>
+
+        {% if movies %}
+        <div class="subscriptions-grid">
+            {% for movie in movies %}
+            <div class="subscription-card-movies">
+                <div class="card-header">
+                    <p class="card-title">{{ movie.title }}</p>
+                </div>
+                <div class="card-image-container">
+                    <img src="{{ url_for('static', filename='images/' + movie.image_url) if movie.image_url 
+                              else url_for('static', filename='images/default_movie.jpg') }}" alt="{{ movie.title }}" class="card-image">
+                </div>
+                <div class="card-body-movie">
+                    <div class="card-info">Жанр: {{ movie.genre }}</div>
+                    <div class="card-info">Год: {{ movie.year }}</div>
+                    <div class="card-info">Рейтинг: {{ movie.age_rating }}</div>
+                    <div class="card-info">Подписка: {{ movie.subscription_required }}</div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('update_movie', id=movie.id) }}" class="card-button edit-btn">
+                        <p>Редактировать</p>
+                    </a>
+                    <form action="{{ url_for('delete_movie', id=movie.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="card-button delete-btn" onclick="return confirm('Вы уверены, что хотите удалить этот фильм?')">
+                            <p>Удалить</p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-subscriptions">
+            <p>Нет доступных фильмов</p>
+            <a href="{{ url_for('create_movie') }}" class="card-button add-btn">Добавить первый фильм</a>
+        </div>
+        {% endif %}
+    </div>
+    
+{% endblock %}
