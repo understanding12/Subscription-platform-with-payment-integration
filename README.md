@@ -1,1 +1,2 @@
-# Subscription-platform-with-payment-integration
+# Subscription_Service
+Разработка IT-проекта на Python
